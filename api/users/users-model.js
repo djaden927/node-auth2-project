@@ -1,6 +1,14 @@
 const db = require('../../data/db-config.js');
 
 function find() {
+
+//   select user_id, username, r.role_name
+// from users
+// join roles r on users.role_id = r.role_id
+
+return db('users as u').join('roles as r', 'u.role_id', 'r.role_id')
+.select('u.user_id', 'u.username', 'r.role_name')
+
   /**
     You will need to join two tables.
     Resolves to an ARRAY with all users.
@@ -34,6 +42,10 @@ function findBy(filter) {
       }
     ]
    */
+    return db("users as u")
+      .join('roles as r', 'u.role_id', "=", "r.role_id")
+      .select("u.user_id", "u.username", "r.role_name as role", "u.password")
+      .where(filter);
 }
 
 function findById(user_id) {
@@ -47,6 +59,11 @@ function findById(user_id) {
       "role_name": "instructor"
     }
    */
+  return db('users as u')
+    .join('roles as r', 'r.role_id', '=', 'u.role_id')
+    .select('u.user_id', 'u.username', 'r.role_name')
+    .where('u.user_id', user_id)
+    .first()
 }
 
 /**
